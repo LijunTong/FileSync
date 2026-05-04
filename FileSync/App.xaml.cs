@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -10,12 +13,34 @@ namespace FileSync
 {
     public partial class App : System.Windows.Application
     {
+        private static readonly string MutexName = "Global\\FileSync_SingleInstance_Mutex";
+        private static Mutex? _mutex;
         private NotifyIcon? _trayIcon;
         private Icon? _appIcon;
         private bool _isExiting;
 
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsIconic(IntPtr hWnd);
+
+        private const int SW_RESTORE = 9;
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            _mutex = new Mutex(true, MutexName, out bool createdNew);
+
+            if (!createdNew)
+            {
+                ActivateExistingInstance();
+                Shutdown();
+                return;
+            }
+
             base.OnStartup(e);
 
             _appIcon = LoadAppIcon();
@@ -64,6 +89,23 @@ namespace FileSync
             base.OnExit(e);
             _trayIcon?.Dispose();
             _appIcon?.Dispose();
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
+        }
+
+        private static void ActivateExistingInstance()
+        {
+            var current = Process.GetCurrentProcess();
+            foreach (var process in Process.GetProcessesByName(current.ProcessName))
+            {
+                if (process.Id != current.Id && process.MainWindowHandle != IntPtr.Zero)
+                {
+                    if (IsIconic(process.MainWindowHandle))
+                        ShowWindow(process.MainWindowHandle, SW_RESTORE);
+                    SetForegroundWindow(process.MainWindowHandle);
+                    break;
+                }
+            }
         }
 
         public void ShowMainWindow()
