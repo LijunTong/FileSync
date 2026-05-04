@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="编辑同步任务" Height="720" Width="620"
         WindowStartupLocation="CenterOwner"
-        WindowState="Maximized"
+        WindowState="Normal"
         ResizeMode="CanResize"
         Background="Transparent"
         AllowsTransparency="True"

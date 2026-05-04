@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:FileSync.Converters"
         Title="同步日志" Height="680" Width="980"
         WindowStartupLocation="CenterOwner"
-        WindowState="Maximized"
+        WindowState="Normal"
         ResizeMode="CanResize"
         Background="Transparent"
         AllowsTransparency="True"
