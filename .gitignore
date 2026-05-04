@@ -22,6 +22,9 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+# Publish output
+publish/
+
 # Visual Studio
 .vs/
 .vscode/
