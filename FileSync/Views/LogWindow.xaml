@@ -1,0 +1,108 @@
+<Window x:Class="FileSync.Views.LogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FileSync.Converters"
+        Title="同步日志" Height="620" Width="880"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgLightBrush}">
+    <Window.Resources>
+        <local:LogActionTextConverter x:Key="LogActionTextConverter"/>
+        <Style x:Key="CenterCell" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="16,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" FontSize="16" FontWeight="Bold" Margin="0,0,0,12">
+            <Run Text="📋 "/><Run Text="{Binding Task.Name, StringFormat='{}{0} - 同步日志'}"/>
+        </TextBlock>
+
+        <!-- Sync Results Card -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Style="{StaticResource CardHeader}" Text="同步记录" Margin="0,0,0,8"/>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Results}"
+                          SelectedItem="{Binding SelectedResult, Mode=TwoWay}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Style="{StaticResource ModernDataGrid}" AlternationCount="2">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="36">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Text="{Binding Status, Converter={StaticResource StatusIconConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="开始时间" Binding="{Binding StartTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="140" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="结束时间" Binding="{Binding EndTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="140" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="复制" Binding="{Binding FilesCopied}" Width="50" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="删除" Binding="{Binding FilesDeleted}" Width="50" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="跳过" Binding="{Binding FilesSkipped}" Width="50" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="错误" Binding="{Binding Errors}" Width="50" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="错误信息" Binding="{Binding ErrorMessage}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Section divider -->
+        <GridSplitter Grid.Row="2" Height="4" HorizontalAlignment="Stretch" Background="Transparent"
+                      IsEnabled="False" Margin="0,6"/>
+
+        <!-- Detail Card (visible when a result is selected) -->
+        <Border Grid.Row="3" Style="{StaticResource CardBorder}" Padding="12"
+                Visibility="{Binding HasSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Style="{StaticResource CardHeader}" Text="文件操作详情" Margin="0,0,0,8"/>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding DetailLogs}"
+                          Style="{StaticResource ModernDataGrid}" AlternationCount="2"
+                          AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="时间" Binding="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="140" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTemplateColumn Header="操作" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"
+                                               Text="{Binding Action, Converter={StaticResource LogActionTextConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="方向" Binding="{Binding Direction}" Width="60" ElementStyle="{StaticResource CenterCell}"/>
+                        <DataGridTextColumn Header="文件路径" Binding="{Binding FilePath}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="ToolTip" Value="{Binding FilePath}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="详情" Binding="{Binding Message}" Width="180"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Empty hint (visible when no selection) -->
+        <TextBlock Grid.Row="3" Text="▲ 点击上方同步记录查看文件操作详情"
+                   Foreground="{StaticResource TextSecondaryBrush}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Visibility="{Binding HasSelection, Converter={StaticResource InverseBooleanConverter}}"/>
+    </Grid>
+</Window>

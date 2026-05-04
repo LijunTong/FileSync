@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- FileSync App Icon - DrawingBrush -->
+    <DrawingImage x:Key="AppIconDrawing">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#1976D2">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,64,64"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="White">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="8,8,48,48" RadiusX="4" RadiusY="4"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#2196F3">
+                    <GeometryDrawing.Geometry>
+                        <StreamGeometry>F16 24 L24 24 L32 16 L32 48 L16 48 ZM32 16 L32 24 L48 24 L48 48 L32 48</StreamGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#1976D2">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M16 24 L24 32 L16 40 M24 32 L40 16 M48 40 L40 32 L48 24" 
+                                          FillRule="NonZero"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>
