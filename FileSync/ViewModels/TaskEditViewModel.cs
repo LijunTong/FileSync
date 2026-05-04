@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
+using Microsoft.Win32;
 using FileSync.Models;
 using FileSync.Utils;
 
@@ -303,16 +304,30 @@ namespace FileSync.ViewModels
 
         private void BrowseSource()
         {
-            using var dialog = new FolderBrowserDialog { Description = "选择源目录" };
-            if (dialog.ShowDialog() == DialogResult.OK)
-                SourcePath = dialog.SelectedPath;
+            var dialog = new OpenFileDialog
+            {
+                Title = "选择源目录",
+                ValidateNames = false,
+                CheckFileExists = false,
+                CheckPathExists = true,
+                FileName = "选择此文件夹"
+            };
+            if (dialog.ShowDialog() == true)
+                SourcePath = Path.GetDirectoryName(dialog.FileName);
         }
 
         private void BrowseTarget()
         {
-            using var dialog = new FolderBrowserDialog { Description = "选择目标目录" };
-            if (dialog.ShowDialog() == DialogResult.OK)
-                TargetPath = dialog.SelectedPath;
+            var dialog = new OpenFileDialog
+            {
+                Title = "选择目标目录",
+                ValidateNames = false,
+                CheckFileExists = false,
+                CheckPathExists = true,
+                FileName = "选择此文件夹"
+            };
+            if (dialog.ShowDialog() == true)
+                TargetPath = Path.GetDirectoryName(dialog.FileName);
         }
 
         private bool CanSave()
