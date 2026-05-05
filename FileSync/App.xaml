@@ -128,7 +128,7 @@
             
             <!-- ========== Danger Button ========== -->
             <Style x:Key="DangerButton" TargetType="Button">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForegroundBrush}"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Padding" Value="16,8"/>
                 <Setter Property="MinWidth" Value="80"/>
@@ -137,13 +137,13 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{StaticResource DangerBrush}"
+                            <Border x:Name="border" Background="{DynamicResource DangerBrush}"
                                     CornerRadius="6" Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#DC2626"/>
+                                    <Setter TargetName="border" Property="Opacity" Value="0.85"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -222,8 +222,8 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#EF4444"/>
-                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource DangerBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForegroundBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
