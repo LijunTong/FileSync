@@ -1,0 +1,19 @@
+<UserControl x:Class="FileSync.Controls.CustomPopupMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Popup x:Name="MenuPopup"
+           Placement="MousePoint"
+           StaysOpen="False"
+           AllowsTransparency="True"
+           PopupAnimation="Fade">
+        <Border x:Name="MenuBorder"
+                Background="{DynamicResource SurfaceBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="4">
+            <StackPanel x:Name="MenuItemsPanel"/>
+        </Border>
+    </Popup>
+</UserControl>

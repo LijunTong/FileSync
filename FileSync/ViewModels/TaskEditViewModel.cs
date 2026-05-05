@@ -31,6 +31,7 @@ namespace FileSync.ViewModels
         private bool _isEnabled = true;
         private string _scheduleError = string.Empty;
         private string _nextRunTime = "";
+        private List<string> _nextRunTimes = new List<string>();
 
         public List<ComboItem<ScheduleType>> ScheduleOptions { get; } = new List<ComboItem<ScheduleType>>
         {
@@ -165,6 +166,12 @@ namespace FileSync.ViewModels
             set { _nextRunTime = value; OnPropertyChanged(); }
         }
 
+        public List<string> NextRunTimes
+        {
+            get => _nextRunTimes;
+            set { _nextRunTimes = value; OnPropertyChanged(); }
+        }
+
         public SyncTask? Task { get; private set; }
 
         public RelayCommand BrowseSourceCommand { get; }
@@ -252,53 +259,71 @@ namespace FileSync.ViewModels
 
         private void CalculateNextRun()
         {
+            var times = new List<string>();
             if (Schedule == ScheduleType.None || !string.IsNullOrEmpty(ScheduleError))
             {
                 NextRunTime = "";
+                NextRunTimes = times;
                 return;
             }
 
             var now = DateTime.Now;
-            DateTime? next = null;
+            DateTime? current = now;
 
-            switch (Schedule)
+            for (int i = 0; i < 5; i++)
             {
-                case ScheduleType.Minutely:
-                    next = now.AddMinutes(MinuteInterval);
+                DateTime? next = null;
+
+                switch (Schedule)
+                {
+                    case ScheduleType.Minutely:
+                        next = current.Value.AddMinutes(MinuteInterval);
+                        break;
+                    case ScheduleType.Hourly:
+                        var targetMin = HourlyMinute;
+                        next = new DateTime(current.Value.Year, current.Value.Month, current.Value.Day, current.Value.Hour, targetMin, 0);
+                        if (next <= current)
+                            next = next.Value.AddHours(1);
+                        break;
+                    case ScheduleType.Daily:
+                        if (ScheduleTime.HasValue)
+                        {
+                            var st = ScheduleTime.Value;
+                            next = new DateTime(current.Value.Year, current.Value.Month, current.Value.Day, st.Hours, st.Minutes, 0);
+                            if (next <= current)
+                                next = next.Value.AddDays(1);
+                        }
+                        break;
+                    case ScheduleType.Weekly:
+                        if (ScheduleTime.HasValue && ScheduleDay.HasValue)
+                        {
+                            var st = ScheduleTime.Value;
+                            next = new DateTime(current.Value.Year, current.Value.Month, current.Value.Day, st.Hours, st.Minutes, 0);
+                            int daysUntil = ((int)ScheduleDay.Value - (int)current.Value.DayOfWeek + 7) % 7;
+                            if (daysUntil == 0 && next <= current)
+                                daysUntil = 7;
+                            next = next.Value.AddDays(daysUntil);
+                        }
+                        break;
+                    case ScheduleType.Cron:
+                        next = CronEvaluator.GetNextOccurrence(CronExpression, current.Value);
+                        break;
+                }
+
+                if (next.HasValue)
+                {
+                    times.Add($"{i + 1}. {next.Value:yyyy-MM-dd HH:mm:ss}");
+                    current = next.Value;
+                }
+                else
+                {
                     break;
-                case ScheduleType.Hourly:
-                    var targetMin = HourlyMinute;
-                    next = new DateTime(now.Year, now.Month, now.Day, now.Hour, targetMin, 0);
-                    if (next <= now)
-                        next = next.Value.AddHours(1);
-                    break;
-                case ScheduleType.Daily:
-                    if (ScheduleTime.HasValue)
-                    {
-                        var st = ScheduleTime.Value;
-                        next = new DateTime(now.Year, now.Month, now.Day, st.Hours, st.Minutes, 0);
-                        if (next <= now)
-                            next = next.Value.AddDays(1);
-                    }
-                    break;
-                case ScheduleType.Weekly:
-                    if (ScheduleTime.HasValue && ScheduleDay.HasValue)
-                    {
-                        var st = ScheduleTime.Value;
-                        next = new DateTime(now.Year, now.Month, now.Day, st.Hours, st.Minutes, 0);
-                        int daysUntil = ((int)ScheduleDay.Value - (int)now.DayOfWeek + 7) % 7;
-                        if (daysUntil == 0 && next <= now)
-                            daysUntil = 7;
-                        next = next.Value.AddDays(daysUntil);
-                    }
-                    break;
-                case ScheduleType.Cron:
-                    next = CronEvaluator.GetNextOccurrence(CronExpression, now);
-                    break;
+                }
             }
 
-            NextRunTime = next.HasValue
-                ? $"下次执行：{next.Value:yyyy-MM-dd HH:mm:ss}"
+            NextRunTimes = times;
+            NextRunTime = times.Count > 0
+                ? $"下次执行：{times[0].Substring(3)}"
                 : "无法计算下次执行时间";
         }
 

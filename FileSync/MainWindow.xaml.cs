@@ -20,13 +20,38 @@ namespace FileSync
             InitializeComponent();
             DataContext = new MainViewModel();
             LoadTheme();
-            UpdateMaximizeButton();
             StateChanged += MainWindow_StateChanged;
+            MouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
+            Deactivated += MainWindow_Deactivated;
         }
 
-        private void MainWindow_StateChanged(object sender, System.EventArgs e)
+        private void MainWindow_Deactivated(object sender, EventArgs e)
         {
-            UpdateMaximizeButton();
+            TaskContextMenu.Hide();
+        }
+
+        private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TaskContextMenu.Hide();
+        }
+
+        private void MainWindow_StateChanged(object? sender, EventArgs e)
+        {
+            UpdateWindowState();
+        }
+
+        private void UpdateWindowState()
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                MainBorder.CornerRadius = new CornerRadius(0);
+                MainBorder.BorderThickness = new Thickness(0);
+            }
+            else
+            {
+                MainBorder.CornerRadius = new CornerRadius(8);
+                MainBorder.BorderThickness = new Thickness(1);
+            }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -65,25 +90,6 @@ namespace FileSync
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
-            UpdateMaximizeButton();
-        }
-
-        private void UpdateMaximizeButton()
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                MaximizeButton.Content = "◱";
-                MainBorder.CornerRadius = new CornerRadius(0);
-                MainBorder.BorderThickness = new Thickness(0);
-                MainShadow.Opacity = 0;
-            }
-            else
-            {
-                MaximizeButton.Content = "□";
-                MainBorder.CornerRadius = new CornerRadius(16);
-                MainBorder.BorderThickness = new Thickness(1);
-                MainShadow.Opacity = 0.15;
-            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -113,8 +119,7 @@ namespace FileSync
         private void ApplyTheme()
         {
             var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            
-            // 移除旧的主题字典
+
             for (int i = mergedDictionaries.Count - 1; i >= 0; i--)
             {
                 var dict = mergedDictionaries[i];
@@ -124,15 +129,16 @@ namespace FileSync
                     mergedDictionaries.RemoveAt(i);
                 }
             }
-            
-            // 添加新的主题字典
-            var themeUri = _isDarkTheme 
+
+            var themeUri = _isDarkTheme
                 ? new Uri("Themes/DarkTheme.xaml", UriKind.Relative)
                 : new Uri("Themes/LightTheme.xaml", UriKind.Relative);
-            
+
             mergedDictionaries.Add(new ResourceDictionary { Source = themeUri });
 
-            ThemeToggleButton.Content = _isDarkTheme ? "☀️" : "🌙";
+            ThemeIcon.Data = _isDarkTheme
+                ? (Geometry)FindResource("SunIcon")
+                : (Geometry)FindResource("MoonIcon");
         }
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -157,6 +163,30 @@ namespace FileSync
                 child = VisualTreeHelper.GetParent(child);
             }
             return null;
+        }
+
+        private void DataGrid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var row = FindParent<DataGridRow>(e.OriginalSource as DependencyObject);
+            if (row?.DataContext is SyncTask task)
+            {
+                ViewModel!.SelectedTask = task;
+
+                TaskContextMenu.Hide();
+                TaskContextMenu.AddItem("立即执行", (Geometry)FindResource("PlayIcon"), () => ViewModel.ExecuteTaskCommand.Execute(null));
+                TaskContextMenu.AddItem("编辑", (Geometry)FindResource("EditIcon"), () => ViewModel.EditTask());
+                TaskContextMenu.AddSeparator();
+                TaskContextMenu.AddItem(task.IsEnabled ? "禁用任务" : "启用任务", (Geometry)FindResource("SettingsIcon"), () => ViewModel.ToggleTaskEnabledCommand.Execute(null));
+                TaskContextMenu.AddSeparator();
+                TaskContextMenu.AddItem("打开源目录", (Geometry)FindResource("FolderIcon"), () => OpenSourceDirectory_Click(null, null));
+                TaskContextMenu.AddItem("打开目标目录", (Geometry)FindResource("FolderIcon"), () => OpenTargetDirectory_Click(null, null));
+                TaskContextMenu.AddSeparator();
+                TaskContextMenu.AddItem("查看日志", (Geometry)FindResource("ClipboardIcon"), () => ViewModel.ViewLogsCommand.Execute(null));
+                TaskContextMenu.AddSeparator();
+                TaskContextMenu.AddItem("删除", (Geometry)FindResource("TrashIcon"), () => ViewModel.DeleteTaskCommand.Execute(null), isDanger: true);
+
+                TaskContextMenu.Show();
+            }
         }
 
         private void EnableCheckBox_Click(object sender, RoutedEventArgs e)
@@ -204,6 +234,36 @@ namespace FileSync
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             ViewModel?.DeleteTaskCommand.Execute(null);
+        }
+
+        private void OpenSourceDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.SelectedTask == null) return;
+
+            var path = ViewModel.SelectedTask.SourcePath;
+            if (System.IO.Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", path);
+            }
+            else
+            {
+                MessageBox.Show($"源目录不存在：\n{path}", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void OpenTargetDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.SelectedTask == null) return;
+
+            var path = ViewModel.SelectedTask.TargetPath;
+            if (System.IO.Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", path);
+            }
+            else
+            {
+                MessageBox.Show($"目标目录不存在：\n{path}", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

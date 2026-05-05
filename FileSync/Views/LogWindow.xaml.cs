@@ -1,6 +1,8 @@
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace FileSync.Views
 {
@@ -9,21 +11,33 @@ namespace FileSync.Views
         public LogWindow()
         {
             InitializeComponent();
-            Loaded += OnLoaded;
-            SizeChanged += OnSizeChanged;
-            StateChanged += OnStateChanged;
+            StateChanged += LogWindow_StateChanged;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private void LogWindow_StateChanged(object? sender, EventArgs e)
         {
-            UpdateMaximizeButtonContent();
+            UpdateWindowState();
+        }
+
+        private void UpdateWindowState()
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                MainBorder.CornerRadius = new CornerRadius(0);
+                MainBorder.BorderThickness = new Thickness(0);
+            }
+            else
+            {
+                MainBorder.CornerRadius = new CornerRadius(8);
+                MainBorder.BorderThickness = new Thickness(1);
+            }
         }
 
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
-                ToggleWindowState();
+                WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
             }
             else
             {
@@ -38,7 +52,7 @@ namespace FileSync.Views
 
         private void MaximizeButton_Click(object sender, RoutedEventArgs e)
         {
-            ToggleWindowState();
+            WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -46,59 +60,44 @@ namespace FileSync.Views
             Close();
         }
 
-        private void ToggleWindowState()
+        private void ResultsGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (WindowState == WindowState.Maximized)
+            ScrollToLeft(ResultsGrid);
+        }
+
+        private void DetailLogsGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            ScrollToLeft(DetailLogsGrid);
+        }
+
+        private void ScrollToLeft(DataGrid dataGrid)
+        {
+            var scrollViewer = FindVisualChild<ScrollViewer>(dataGrid);
+            if (scrollViewer != null)
             {
-                WindowState = WindowState.Normal;
-            }
-            else
-            {
-                WindowState = WindowState.Maximized;
+                scrollViewer.ScrollToHorizontalOffset(0);
             }
         }
 
-        private void OnStateChanged(object sender, EventArgs e)
+        private static T? FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
-            UpdateWindowStateChanged();
-        }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            // Ensure borders change isn't needed for this window
-        }
-
-        private void UpdateWindowStateChanged()
-        {
-            if (WindowState == WindowState.Maximized)
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
-                MainBorder.CornerRadius = new CornerRadius(0);
-                MainShadow.Opacity = 0;
-                ResizeMode = ResizeMode.CanMinimize;
-                this.MaxWidth = double.PositiveInfinity;
-                this.MaxHeight = double.PositiveInfinity;
-                this.MinWidth = 980;
-                this.MinHeight = 680;
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is T)
+                {
+                    return (T)child;
+                }
+                else
+                {
+                    T? childOfChild = FindVisualChild<T>(child);
+                    if (childOfChild != null)
+                    {
+                        return childOfChild;
+                    }
+                }
             }
-            else
-            {
-                MainBorder.CornerRadius = new CornerRadius(16);
-                MainShadow.Opacity = 0.15;
-                ResizeMode = ResizeMode.CanResize;
-            }
-            UpdateMaximizeButtonContent();
-        }
-
-        private void UpdateMaximizeButtonContent()
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                MaximizeButton.Content = "◱";
-            }
-            else
-            {
-                MaximizeButton.Content = "□";
-            }
+            return null;
         }
     }
 }

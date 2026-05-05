@@ -16,16 +16,151 @@
                 </GeometryDrawing>
                 <GeometryDrawing Brush="#2196F3">
                     <GeometryDrawing.Geometry>
-                        <StreamGeometry>F16 24 L24 24 L32 16 L32 48 L16 48 ZM32 16 L32 24 L48 24 L48 48 L32 48</StreamGeometry>
+                        <GeometryGroup>
+                            <PathGeometry Figures="M16,24 L24,24 L32,16 L32,48 L16,48 Z"/>
+                            <PathGeometry Figures="M32,16 L32,24 L48,24 L48,48 L32,48 Z"/>
+                        </GeometryGroup>
                     </GeometryDrawing.Geometry>
                 </GeometryDrawing>
                 <GeometryDrawing Brush="#1976D2">
                     <GeometryDrawing.Geometry>
-                        <PathGeometry Figures="M16 24 L24 32 L16 40 M24 32 L40 16 M48 40 L40 32 L48 24" 
+                        <PathGeometry Figures="M16 24 L24 32 L16 40 M24 32 L40 16 M48 40 L40 32 L48 24"
                                           FillRule="NonZero"/>
                     </GeometryDrawing.Geometry>
                 </GeometryDrawing>
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+
+    <!-- Moon Icon (for dark mode toggle) -->
+    <PathGeometry x:Key="MoonIcon">M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.2c-.38-.54-.76-1.04-1.14-1.54z</PathGeometry>
+
+    <!-- Sun Icon (for light mode toggle) -->
+    <PathGeometry x:Key="SunIcon">M12 7a5 5 0 100 10 5 5 0 000-10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42</PathGeometry>
+
+    <!-- Plus Icon -->
+    <PathGeometry x:Key="PlusIcon">M12 5v14M5 12h14</PathGeometry>
+
+    <!-- Play Icon -->
+    <PathGeometry x:Key="PlayIcon">M5 3l14 9-14 9V3z</PathGeometry>
+
+    <!-- Clipboard Icon -->
+    <PathGeometry x:Key="ClipboardIcon">M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M15 2H9a1 1 0 00-1 1v2a1 1 0 001 1h6a1 1 0 001-1V3a1 1 0 00-1-1z</PathGeometry>
+
+    <!-- Edit Icon -->
+    <PathGeometry x:Key="EditIcon">M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z</PathGeometry>
+
+    <!-- Trash Icon -->
+    <PathGeometry x:Key="TrashIcon">M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6</PathGeometry>
+
+    <!-- Check Icon -->
+    <PathGeometry x:Key="CheckIcon">M20 6L9 17l-5-5</PathGeometry>
+
+    <!-- Close Icon -->
+    <PathGeometry x:Key="CloseIcon">M18 6L6 18M6 6l12 12</PathGeometry>
+
+    <!-- Minimize Icon -->
+    <PathGeometry x:Key="MinimizeIcon">M5 12h14</PathGeometry>
+
+    <!-- Maximize Icon -->
+    <PathGeometry x:Key="MaximizeIcon">M4 4h16v16H4z</PathGeometry>
+
+    <!-- Restore Icon -->
+    <PathGeometry x:Key="RestoreIcon">M4 8h12v12H4zM8 4h12v12H8z</PathGeometry>
+
+    <!-- Folder Icon -->
+    <PathGeometry x:Key="FolderIcon">M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2v11z</PathGeometry>
+
+    <!-- File Icon -->
+    <PathGeometry x:Key="FileIcon">M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8</PathGeometry>
+
+    <!-- Success Icon -->
+    <PathGeometry x:Key="SuccessIcon">M22 11.08V12a10 10 0 11-5.93-9.14M22 4L12 14.01l-3-3</PathGeometry>
+
+    <!-- Error Icon -->
+    <PathGeometry x:Key="ErrorIcon">M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM15 9l-6 6M9 9l6 6</PathGeometry>
+
+    <!-- Warning Icon -->
+    <PathGeometry x:Key="WarningIcon">M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01</PathGeometry>
+
+    <!-- Sync Icon -->
+    <PathGeometry x:Key="SyncIcon">M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15</PathGeometry>
+
+    <!-- Settings Icon -->
+    <PathGeometry x:Key="SettingsIcon">M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z</PathGeometry>
+
+    <!-- Arrow Right Icon -->
+    <PathGeometry x:Key="ArrowRightIcon">M5 12h14M12 5l7 7-7 7</PathGeometry>
+
+    <!-- Arrow Left Icon -->
+    <PathGeometry x:Key="ArrowLeftIcon">M19 12H5M12 19l-7-7 7-7</PathGeometry>
+
+    <!-- Chevron Right Icon -->
+    <PathGeometry x:Key="ChevronRightIcon">M9 18l6-6-6-6</PathGeometry>
+
+    <!-- Chevron Down Icon -->
+    <PathGeometry x:Key="ChevronDownIcon">M6 9l6 6 6-6</PathGeometry>
+
+    <!-- Circle Icon (for disabled/off state) -->
+    <PathGeometry x:Key="CircleIcon">M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z</PathGeometry>
+
+    <!-- Bidirectional Sync Icon -->
+    <PathGeometry x:Key="BidirectionalIcon">M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3</PathGeometry>
+
+    <!-- Question Icon -->
+    <PathGeometry x:Key="QuestionIcon">M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z</PathGeometry>
+
+    <!-- PathGeometry to DrawingBrush converters for icons -->
+    <DrawingBrush x:Key="MoonIconBrush" Drawing="{StaticResource MoonIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="SunIconBrush" Drawing="{StaticResource SunIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="PlusIconBrush" Drawing="{StaticResource PlusIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="PlayIconBrush" Drawing="{StaticResource PlayIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ClipboardIconBrush" Drawing="{StaticResource ClipboardIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="EditIconBrush" Drawing="{StaticResource EditIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="TrashIconBrush" Drawing="{StaticResource TrashIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="CheckIconBrush" Drawing="{StaticResource CheckIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="CloseIconBrush" Drawing="{StaticResource CloseIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="MinimizeIconBrush" Drawing="{StaticResource MinimizeIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="MaximizeIconBrush" Drawing="{StaticResource MaximizeIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="RestoreIconBrush" Drawing="{StaticResource RestoreIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="FolderIconBrush" Drawing="{StaticResource FolderIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="FileIconBrush" Drawing="{StaticResource FileIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="SuccessIconBrush" Drawing="{StaticResource SuccessIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ErrorIconBrush" Drawing="{StaticResource ErrorIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="WarningIconBrush" Drawing="{StaticResource WarningIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="SyncIconBrush" Drawing="{StaticResource SyncIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="SettingsIconBrush" Drawing="{StaticResource SettingsIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ArrowRightIconBrush" Drawing="{StaticResource ArrowRightIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ArrowLeftIconBrush" Drawing="{StaticResource ArrowLeftIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ChevronRightIconBrush" Drawing="{StaticResource ChevronRightIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="ChevronDownIconBrush" Drawing="{StaticResource ChevronDownIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="CircleIconBrush" Drawing="{StaticResource CircleIconDrawing}" Stretch="Uniform"/>
+    <DrawingBrush x:Key="BidirectionalIconBrush" Drawing="{StaticResource BidirectionalIconDrawing}" Stretch="Uniform"/>
+
+    <!-- Drawing versions for icons -->
+    <GeometryDrawing x:Key="MoonIconDrawing" Geometry="{StaticResource MoonIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="SunIconDrawing" Geometry="{StaticResource SunIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="PlusIconDrawing" Geometry="{StaticResource PlusIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="PlayIconDrawing" Geometry="{StaticResource PlayIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="ClipboardIconDrawing" Geometry="{StaticResource ClipboardIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="EditIconDrawing" Geometry="{StaticResource EditIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="TrashIconDrawing" Geometry="{StaticResource TrashIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="CheckIconDrawing" Geometry="{StaticResource CheckIcon}" Brush="{DynamicResource SuccessBrush}"/>
+    <GeometryDrawing x:Key="CloseIconDrawing" Geometry="{StaticResource CloseIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="MinimizeIconDrawing" Geometry="{StaticResource MinimizeIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="MaximizeIconDrawing" Geometry="{StaticResource MaximizeIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="RestoreIconDrawing" Geometry="{StaticResource RestoreIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="FolderIconDrawing" Geometry="{StaticResource FolderIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="FileIconDrawing2" Geometry="{StaticResource FileIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="SuccessIconDrawing" Geometry="{StaticResource SuccessIcon}" Brush="{DynamicResource SuccessBrush}"/>
+    <GeometryDrawing x:Key="ErrorIconDrawing" Geometry="{StaticResource ErrorIcon}" Brush="{DynamicResource DangerBrush}"/>
+    <GeometryDrawing x:Key="WarningIconDrawing" Geometry="{StaticResource WarningIcon}" Brush="{DynamicResource WarningBrush}"/>
+    <GeometryDrawing x:Key="SyncIconDrawing" Geometry="{StaticResource SyncIcon}" Brush="{DynamicResource PrimaryBrush}"/>
+    <GeometryDrawing x:Key="SettingsIconDrawing" Geometry="{StaticResource SettingsIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="ArrowRightIconDrawing" Geometry="{StaticResource ArrowRightIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="ArrowLeftIconDrawing" Geometry="{StaticResource ArrowLeftIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="ChevronRightIconDrawing" Geometry="{StaticResource ChevronRightIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="ChevronDownIconDrawing" Geometry="{StaticResource ChevronDownIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="CircleIconDrawing" Geometry="{StaticResource CircleIcon}" Brush="{DynamicResource TextSecondaryBrush}"/>
+    <GeometryDrawing x:Key="BidirectionalIconDrawing" Geometry="{StaticResource BidirectionalIcon}" Brush="{DynamicResource PrimaryBrush}"/>
 </ResourceDictionary>

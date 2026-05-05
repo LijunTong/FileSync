@@ -113,6 +113,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ConfirmWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CustomPopupMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -130,6 +142,8 @@
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="Views\TaskEditWindow.xaml.cs" />
     <Compile Include="Views\LogWindow.xaml.cs" />
+    <Compile Include="Views\ConfirmWindow.xaml.cs" />
+    <Compile Include="Controls\CustomPopupMenu.xaml.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\SyncEngine.cs" />
