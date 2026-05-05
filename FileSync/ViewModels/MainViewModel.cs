@@ -150,8 +150,13 @@ namespace FileSync.ViewModels
         private void DeleteTask()
         {
             if (SelectedTask == null) return;
-            if (MessageBox.Show($"确定要删除任务 \"{SelectedTask.Name}\" 吗？\n\n此操作不可撤销。",
-                    "确认删除", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            var window = new Views.ConfirmWindow(
+                "确认删除",
+                $"确定要删除任务 \"{SelectedTask.Name}\" 吗？\n\n此操作不可撤销。",
+                "删除",
+                "取消");
+            window.Owner = Application.Current.MainWindow;
+            if (window.ShowDialog() == true)
             {
                 ConfigService.Instance.DeleteTask(SelectedTask.Id);
                 Tasks.Remove(SelectedTask);
@@ -163,8 +168,13 @@ namespace FileSync.ViewModels
         private void ExecuteTask()
         {
             if (SelectedTask == null) return;
-            if (MessageBox.Show($"确定要立即执行任务 \"{SelectedTask.Name}\" 吗？",
-                    "确认执行", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            var window = new Views.ConfirmWindow(
+                "确认执行",
+                $"确定要立即执行任务 \"{SelectedTask.Name}\" 吗？",
+                "执行",
+                "取消");
+            window.Owner = Application.Current.MainWindow;
+            if (window.ShowDialog() == true)
             {
                 _ = ExecuteTaskAsync(SelectedTask);
             }
