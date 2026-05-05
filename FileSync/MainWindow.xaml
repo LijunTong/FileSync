@@ -291,6 +291,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" FontSize="12"
@@ -299,8 +300,12 @@
 
                     <ProgressBar Grid.Column="1" Style="{StaticResource ModernProgressBar}"
                                  Value="{Binding ProgressValue}" Maximum="{Binding ProgressMaximum}"
-                                 Width="200" HorizontalAlignment="Right"
+                                 Width="200" HorizontalAlignment="Right" Margin="0,0,16,0"
                                  Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    <TextBlock Grid.Column="2" Text="{Binding VersionNumber}" FontSize="12"
+                               Foreground="{DynamicResource TextTertiaryBrush}"
+                               VerticalAlignment="Center"/>
                 </Grid>
             </Border>
         </Grid>
