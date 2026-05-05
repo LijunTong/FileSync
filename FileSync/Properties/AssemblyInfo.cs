@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("FileSync")]
-[assembly: AssemblyDescription("File Synchronization and Backup Tool")]
+[assembly: AssemblyTitle("文件同步")]
+[assembly: AssemblyDescription("文件同步备份工具 - FileSync")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("joont")]
 [assembly: AssemblyProduct("FileSync")]
-[assembly: AssemblyCopyright("Copyright ©  2026")]
+[assembly: AssemblyCopyright("Copyright © joont 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
