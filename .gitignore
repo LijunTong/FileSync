@@ -42,3 +42,4 @@ cmake-build-*/
 
 # Release package
 *.zip
+/.trae/skills
