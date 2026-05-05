@@ -13,8 +13,10 @@
     <Color x:Key="Card">#334155</Color>
     <Color x:Key="TextPrimary">#FFFFFF</Color>
     <Color x:Key="TextSecondary">#CBD5E1</Color>
+    <Color x:Key="TextTertiary">#64748B</Color>
     <Color x:Key="Border">#475569</Color>
     <Color x:Key="Hover">#334155</Color>
+    <Color x:Key="SelectedRow">#2D3250</Color>
     <Color x:Key="PrimaryButtonForeground">#FFFFFF</Color>
     
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
@@ -32,5 +34,8 @@
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Border}"/>
     <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource Hover}"/>
     <SolidColorBrush x:Key="PrimaryButtonForegroundBrush" Color="{StaticResource PrimaryButtonForeground}"/>
+    <SolidColorBrush x:Key="TextTertiaryBrush" Color="{StaticResource TextTertiary}"/>
+    <SolidColorBrush x:Key="SelectedRowBrush" Color="{StaticResource SelectedRow}"/>
+    <SolidColorBrush x:Key="BackgroundSecondaryBrush" Color="{StaticResource Hover}"/>
     
 </ResourceDictionary>

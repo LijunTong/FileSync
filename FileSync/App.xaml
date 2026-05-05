@@ -463,8 +463,23 @@
             <!-- ========== Modern DataGrid ========== -->
             <Style x:Key="ModernDataGrid" TargetType="DataGrid">
                 <Style.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource PrimaryLight}"/>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource Primary}"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource TextPrimaryBrush}"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource TextPrimaryBrush}"/>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </Style.Resources>
                 <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
                 <Setter Property="BorderThickness" Value="0"/>
@@ -485,7 +500,8 @@
                     <Setter.Value>
                         <Style TargetType="DataGridRow">
                             <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
                             <Style.Triggers>
                                 <Trigger Property="AlternationIndex" Value="1">
                                     <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
@@ -499,7 +515,8 @@
                                     <Setter Property="Opacity" Value="1"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource PrimaryLightBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource SelectedRowBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
                                     <Setter Property="Opacity" Value="1"/>
                                 </Trigger>
                             </Style.Triggers>
