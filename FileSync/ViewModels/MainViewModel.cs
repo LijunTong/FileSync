@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,6 +65,13 @@ namespace FileSync.ViewModels
         public bool IsProgressVisible => ProgressValue > 0;
         public bool HasTasks => Tasks.Count > 0;
 
+        private string _versionNumber;
+        public string VersionNumber
+        {
+            get => _versionNumber;
+            set { _versionNumber = value; OnPropertyChanged(); }
+        }
+
         public bool AutoStart
         {
             get => _autoStart;
@@ -92,6 +100,10 @@ namespace FileSync.ViewModels
             _scheduler.TaskDue += async (s, task) => await ExecuteTaskAsync(task);
 
             _autoStart = ConfigService.Instance.Settings.AutoStart;
+
+            // 获取版本号
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            _versionNumber = $"v{version?.Major}.{version?.Minor}.{version?.Build}";
 
             AddTaskCommand = new RelayCommand(AddTask, () => !IsBusy);
             EditTaskCommand = new RelayCommand(EditTask, () => SelectedTask != null && !IsBusy);
