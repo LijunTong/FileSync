@@ -42,3 +42,7 @@ cmake-build-*/
 
 # Release package
 *.zip
+
+# Trae IDE
+.trae/
+.claude/
