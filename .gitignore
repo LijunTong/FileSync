@@ -39,3 +39,6 @@ cmake-build-*/
 # NuGet
 *.nupkg
 *.snupkg
+
+# Release package
+*.zip
