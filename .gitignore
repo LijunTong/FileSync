@@ -46,3 +46,5 @@ cmake-build-*/
 # Trae IDE
 .trae/
 .claude/
+/.claude
+/.trae
