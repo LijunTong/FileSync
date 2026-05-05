@@ -16,7 +16,10 @@
                 </GeometryDrawing>
                 <GeometryDrawing Brush="#2196F3">
                     <GeometryDrawing.Geometry>
-                        <StreamGeometry>F16 24 L24 24 L32 16 L32 48 L16 48 ZM32 16 L32 24 L48 24 L48 48 L32 48</StreamGeometry>
+                        <GeometryGroup>
+                            <PathGeometry Figures="M16,24 L24,24 L32,16 L32,48 L16,48 Z"/>
+                            <PathGeometry Figures="M32,16 L32,24 L48,24 L48,48 L32,48 Z"/>
+                        </GeometryGroup>
                     </GeometryDrawing.Geometry>
                 </GeometryDrawing>
                 <GeometryDrawing Brush="#1976D2">

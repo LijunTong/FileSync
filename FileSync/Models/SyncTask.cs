@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using FileSync.Utils;
 
 namespace FileSync.Models
@@ -22,8 +25,24 @@ namespace FileSync.Models
         Failed
     }
 
-    public class SyncTask
+    public class SyncTask : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public string SourcePath { get; set; } = string.Empty;
@@ -35,10 +54,53 @@ namespace FileSync.Models
         public TimeSpan? ScheduleTime { get; set; }
         public DayOfWeek? ScheduleDay { get; set; }
         public string CronExpression { get; set; } = string.Empty;
-        public bool IsEnabled { get; set; } = true;
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (SetField(ref _isEnabled, value))
+                {
+                    OnPropertyChanged(nameof(NextRunDisplay));
+                }
+            }
+        }
+
         public DateTime? LastRunTime { get; set; }
         public SyncStatus LastStatus { get; set; } = SyncStatus.Idle;
         public string LastErrorMessage { get; set; } = string.Empty;
+
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set
+            {
+                if (SetField(ref _isRunning, value))
+                {
+                    if (!value)
+                    {
+                        ProgressValue = 0;
+                        ProgressMax = 1;
+                    }
+                }
+            }
+        }
+
+        private int _progressValue;
+        public int ProgressValue
+        {
+            get => _progressValue;
+            set => SetField(ref _progressValue, value);
+        }
+
+        private int _progressMax = 1;
+        public int ProgressMax
+        {
+            get => _progressMax;
+            set => SetField(ref _progressMax, value);
+        }
 
         public string ScheduleDisplay
         {
@@ -133,7 +195,10 @@ namespace FileSync.Models
         {
             if (string.IsNullOrWhiteSpace(FilterPattern))
                 return new List<string> { "*.*" };
-            return new List<string>(FilterPattern.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries));
+            return FilterPattern.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                               .Select(f => f.Trim())
+                               .Where(f => !string.IsNullOrWhiteSpace(f))
+                               .ToList();
         }
     }
 }

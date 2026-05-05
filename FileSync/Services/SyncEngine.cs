@@ -34,6 +34,11 @@ namespace FileSync.Services
 
             try
             {
+                // 开始运行
+                task.IsRunning = true;
+                task.ProgressValue = 0;
+                task.ProgressMax = 1;
+
                 if (!Directory.Exists(task.SourcePath))
                     throw new DirectoryNotFoundException($"Source directory not found: {task.SourcePath}");
 
@@ -44,11 +49,13 @@ namespace FileSync.Services
 
                 // Phase 1: Count files
                 ReportProgress("Scanning...", 0, 0);
+                task.ProgressValue = 0;
                 int totalFiles = await Task.Run(() => CountFiles(task.SourcePath, filters), cancellationToken);
                 if (task.IsBidirectional)
                 {
                     totalFiles += await Task.Run(() => CountFiles(task.TargetPath, filters), cancellationToken);
                 }
+                task.ProgressMax = totalFiles > 0 ? totalFiles : 1;
 
                 int processed = 0;
 
@@ -92,6 +99,9 @@ namespace FileSync.Services
             }
             DatabaseService.Instance.InsertSyncResult(result);
 
+            // 结束运行
+            task.IsRunning = false;
+
             return result;
         }
 
@@ -112,7 +122,11 @@ namespace FileSync.Services
                 string destPath = Path.Combine(target, relativePath);
 
                 processed++;
+                task.ProgressValue = processed;
                 ReportProgress(relativePath, processed, totalFiles);
+
+                // 添加延时方便测试进度条
+                Thread.Sleep(100);
 
                 var srcInfo = new FileInfo(file);
                 var destInfo = new FileInfo(destPath);
@@ -187,7 +201,11 @@ namespace FileSync.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 string relativePath = leftFile.Substring(left.Length).TrimStart('\\', '/');
                 processed++;
+                task.ProgressValue = processed;
                 ReportProgress(relativePath, processed, totalFiles);
+
+                // 添加延时方便测试进度条
+                Thread.Sleep(100);
 
                 var leftInfo = new FileInfo(leftFile);
                 string rightFile = Path.Combine(right, relativePath);
@@ -253,7 +271,11 @@ namespace FileSync.Services
                 string rightFile = remaining.Value;
                 string leftFile = Path.Combine(left, relativePath);
                 processed++;
+                task.ProgressValue = processed;
                 ReportProgress(relativePath, processed, totalFiles);
+
+                // 添加延时方便测试进度条
+                Thread.Sleep(100);
 
                 try
                 {
@@ -276,30 +298,69 @@ namespace FileSync.Services
             var files = new List<string>();
             if (!Directory.Exists(directory)) return files;
 
-            foreach (var filter in filters)
+            try
             {
-                try
+                var allFiles = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+                
+                foreach (var file in allFiles)
                 {
-                    files.AddRange(Directory.GetFiles(directory, filter, SearchOption.AllDirectories));
+                    var fileName = Path.GetFileName(file);
+                    foreach (var filter in filters)
+                    {
+                        if (MatchesFilter(fileName, filter))
+                        {
+                            files.Add(file);
+                            break;
+                        }
+                    }
                 }
-                catch { }
             }
+            catch { }
+            
             return files.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
 
         private int CountFiles(string directory, List<string> filters)
         {
             if (!Directory.Exists(directory)) return 0;
-            int count = 0;
-            foreach (var filter in filters)
+            
+            try
             {
-                try
+                var allFiles = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+                int count = 0;
+                
+                foreach (var file in allFiles)
                 {
-                    count += Directory.GetFiles(directory, filter, SearchOption.AllDirectories).Length;
+                    var fileName = Path.GetFileName(file);
+                    foreach (var filter in filters)
+                    {
+                        if (MatchesFilter(fileName, filter))
+                        {
+                            count++;
+                            break;
+                        }
+                    }
                 }
-                catch { }
+                
+                return count;
             }
-            return count;
+            catch { }
+            
+            return 0;
+        }
+
+        private bool MatchesFilter(string fileName, string filter)
+        {
+            if (string.IsNullOrWhiteSpace(filter))
+                return true;
+                
+            // 简单的通配符匹配：* 匹配任意字符，? 匹配单个字符
+            var pattern = "^" + System.Text.RegularExpressions.Regex.Escape(filter)
+                                 .Replace("\\*", ".*")
+                                 .Replace("\\?", ".") + "$";
+            
+            return System.Text.RegularExpressions.Regex.IsMatch(fileName, pattern, 
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
 
         private void CleanupEmptyDirectories(string directory)

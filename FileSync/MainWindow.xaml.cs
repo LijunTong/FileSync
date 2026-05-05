@@ -176,6 +176,8 @@ namespace FileSync
                 TaskContextMenu.AddItem("立即执行", (Geometry)FindResource("PlayIcon"), () => ViewModel.ExecuteTaskCommand.Execute(null));
                 TaskContextMenu.AddItem("编辑", (Geometry)FindResource("EditIcon"), () => ViewModel.EditTask());
                 TaskContextMenu.AddSeparator();
+                TaskContextMenu.AddItem(task.IsEnabled ? "禁用任务" : "启用任务", (Geometry)FindResource("SettingsIcon"), () => ViewModel.ToggleTaskEnabledCommand.Execute(null));
+                TaskContextMenu.AddSeparator();
                 TaskContextMenu.AddItem("打开源目录", (Geometry)FindResource("FolderIcon"), () => OpenSourceDirectory_Click(null, null));
                 TaskContextMenu.AddItem("打开目标目录", (Geometry)FindResource("FolderIcon"), () => OpenTargetDirectory_Click(null, null));
                 TaskContextMenu.AddSeparator();

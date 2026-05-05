@@ -223,8 +223,18 @@
 
                             <Border Background="{DynamicResource PrimaryLightBrush}" CornerRadius="6" Padding="12,8" Margin="0,12,0,0"
                                     Visibility="{Binding IsNextRunVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <TextBlock FontSize="13" FontWeight="500" Foreground="{DynamicResource PrimaryBrush}"
-                                           Text="{Binding NextRunTime}"/>
+                                <StackPanel>
+                                    <TextBlock FontSize="13" FontWeight="500" Foreground="{DynamicResource PrimaryBrush}"
+                                               Text="下次执行时间预测：" Margin="0,0,0,4"/>
+                                    <ItemsControl ItemsSource="{Binding NextRunTimes}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
+                                                           Text="{Binding}" Margin="0,2,0,0"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </Border>
                         </StackPanel>
                     </Border>

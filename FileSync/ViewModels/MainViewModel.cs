@@ -25,6 +25,7 @@ namespace FileSync.ViewModels
         private int _progressMaximum = 100;
         private bool _isBusy;
         private bool _autoStart;
+        private Timer? _updateTimer;
 
         public ObservableCollection<SyncTask> Tasks { get; } = new ObservableCollection<SyncTask>();
 
@@ -79,6 +80,7 @@ namespace FileSync.ViewModels
         public RelayCommand DeleteTaskCommand { get; }
         public RelayCommand ExecuteTaskCommand { get; }
         public RelayCommand ViewLogsCommand { get; }
+        public RelayCommand ToggleTaskEnabledCommand { get; }
         public RelayCommand ExitCommand { get; }
 
         public MainViewModel()
@@ -96,6 +98,7 @@ namespace FileSync.ViewModels
             DeleteTaskCommand = new RelayCommand(DeleteTask, () => SelectedTask != null && !IsBusy);
             ExecuteTaskCommand = new RelayCommand(ExecuteTask, () => SelectedTask != null && !IsBusy);
             ViewLogsCommand = new RelayCommand(ViewLogs, () => SelectedTask != null);
+            ToggleTaskEnabledCommand = new RelayCommand(ToggleTaskEnabled, () => SelectedTask != null && !IsBusy);
             ExitCommand = new RelayCommand(() =>
             {
                 if (App.Current is App app)
@@ -103,6 +106,18 @@ namespace FileSync.ViewModels
             });
 
             LoadTasks();
+
+            // 启动定时器，每秒更新下次运行时间显示
+            _updateTimer = new Timer(_ =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var task in Tasks)
+                    {
+                        task.OnPropertyChanged(nameof(SyncTask.NextRunDisplay));
+                    }
+                });
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
 
         private void LoadTasks()
@@ -229,6 +244,14 @@ namespace FileSync.ViewModels
                 Owner = Application.Current.MainWindow
             };
             window.ShowDialog();
+        }
+
+        private void ToggleTaskEnabled()
+        {
+            if (SelectedTask == null) return;
+            SelectedTask.IsEnabled = !SelectedTask.IsEnabled;
+            ConfigService.Instance.UpdateTask(SelectedTask);
+            RefreshTasks();
         }
 
         public void RefreshTasks()
