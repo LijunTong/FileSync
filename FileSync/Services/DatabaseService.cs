@@ -47,7 +47,7 @@ namespace FileSync.Services
 
         private IDbConnection CreateConnection()
         {
-            var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={_dbPath};Version=3;");
+            var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={_dbPath};Version=3;");
             connection.Open();
             return connection;
         }

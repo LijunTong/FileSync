@@ -1,0 +1,16 @@
+global using System.Windows;
+global using System.Windows.Controls;
+global using System.Windows.Data;
+global using System.Windows.Media;
+global using Application = System.Windows.Application;
+global using MessageBox = System.Windows.MessageBox;
+global using Button = System.Windows.Controls.Button;
+global using CheckBox = System.Windows.Controls.CheckBox;
+global using Timer = System.Threading.Timer;
+global using Brush = System.Windows.Media.Brush;
+global using Brushes = System.Windows.Media.Brushes;
+global using UserControl = System.Windows.Controls.UserControl;
+global using Orientation = System.Windows.Controls.Orientation;
+global using Binding = System.Windows.Data.Binding;
+global using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+global using Color = System.Windows.Media.Color;

@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -7,7 +6,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace FileSync
 {
@@ -72,12 +70,10 @@ namespace FileSync
                 Text = "FileSync - 文件同步备份工具"
             };
 
-            _trayIcon.ContextMenu = new ContextMenu(new[]
-            {
-                new MenuItem("显示主窗口", (s, _) => ShowMainWindow()),
-                new MenuItem("-"),
-                new MenuItem("退出", (s, _) => ForceExit())
-            });
+            _trayIcon.ContextMenuStrip = new ContextMenuStrip();
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("显示主窗口", null, (s, _) => ShowMainWindow()));
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripMenuItem("退出", null, (s, _) => ForceExit()));
 
             _trayIcon.DoubleClick += (s, _) => ShowMainWindow();
 
@@ -163,7 +159,7 @@ namespace FileSync
             var bmp = new Bitmap(32, 32);
             using (var g = Graphics.FromImage(bmp))
             {
-                g.Clear(Color.FromArgb(25, 118, 210));
+                g.Clear(System.Drawing.Color.FromArgb(25, 118, 210));
             }
             return Icon.FromHandle(bmp.GetHicon());
         }
